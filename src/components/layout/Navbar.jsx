@@ -4,7 +4,7 @@ import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar = () => {
-  const { activeSection } = usePortfolioStore();
+  const { activeSection, setActiveSection } = usePortfolioStore();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -26,10 +26,7 @@ export const Navbar = () => {
 
   const handleNavClick = (id) => {
     setIsOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    setActiveSection(id);
   };
 
   return (

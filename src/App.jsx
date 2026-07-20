@@ -133,6 +133,8 @@ import { ProfileCard } from './components/ui/ProfileCard';
 import { GlassCard } from './components/ui/GlassCard';
 import { Badge } from './components/ui/Badge';
 import { Button } from './components/ui/Button';
+import { ContinueButton } from './components/ui/ContinueButton';
+import { SectionNavigationControls } from './components/ui/SectionNavigationControls';
 import confetti from 'canvas-confetti';
 import narendraImage from './assets/narendra.jpg';
 import {
@@ -300,33 +302,7 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Setup intersection observer to track current active section
-  useEffect(() => {
-    const sections = ['hero', 'about', 'timeline', 'flagship', 'skills', 'credentials', 'contact'];
 
-    const observers = sections.map((sectionId) => {
-      const el = document.getElementById(sectionId);
-      if (!el) return null;
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(sectionId);
-          }
-        },
-        { threshold: 0.35 }
-      );
-
-      observer.observe(el);
-      return { observer, el };
-    });
-
-    return () => {
-      observers.forEach((obs) => {
-        if (obs) obs.observer.unobserve(obs.el);
-      });
-    };
-  }, [setActiveSection]);
 
   // Track scroll position percentage globally
   useEffect(() => {
@@ -353,7 +329,7 @@ function App() {
 
 
   return (
-    <div ref={containerRef} className="relative bg-[#FAFAFC] text-zinc-700 min-h-screen selection:bg-accent-indigo/30 selection:text-zinc-900">
+    <div ref={containerRef} className="fixed inset-0 h-screen w-screen overflow-hidden bg-[#FAFAFC] text-zinc-700 selection:bg-accent-indigo/30 selection:text-zinc-900">
       {/* 3D Global Canvas Layer */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas
@@ -369,45 +345,24 @@ function App() {
       </div>
 
       {/* HTML Layout Overlays */}
-      <div className="relative z-10">
+      <div className="relative z-10 h-full w-full overflow-hidden flex flex-col justify-between">
         <Preloader />
         <Navbar />
+        <SectionNavigationControls />
 
-        {/* Floating Launch Button - Fixed Position */}
-        <motion.div
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2 }}
-          className="fixed bottom-6 right-6 z-50"
-        >
-          <motion.a
-            href="https://ai-interview-platform-2026-tau.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="group flex items-center space-x-3 px-5 py-3 rounded-full bg-gradient-to-r from-accent-indigo to-accent-teal text-white font-bold text-sm shadow-[0_8px_32px_rgba(99,102,241,0.4)] hover:shadow-[0_12px_40px_rgba(99,102,241,0.6)] backdrop-blur-sm border border-white/20 transition-all duration-300"
-            onClick={(e) => {
-              // Add confetti effect
-              confetti({
-                particleCount: 150,
-                spread: 70,
-                colors: ['#6366F1', '#14B8A6', '#A855F7'],
-                origin: { x: 0.9, y: 0.8 }
-              });
-            }}
-          >
-            <span className="text-sm">🚀</span>
-            <span className="hidden sm:inline">Launch AI Platform</span>
-            <span className="sm:hidden">Launch</span>
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </motion.a>
-        </motion.div>
-
-        {/* ==================================================== */}
-        {/* HERO SECTION */}
-        {/* ==================================================== */}
-        <section id="hero" className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden bg-transparent">
+        {/* Page Container */}
+        <div className="h-full w-full overflow-hidden">
+          <AnimatePresence mode="wait">
+            {activeSection === 'hero' && (
+              <motion.div
+                key="hero"
+                initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
+              >
+                <section id="hero" className="relative min-h-[calc(100vh-8rem)] flex flex-col justify-between items-center py-10 overflow-hidden bg-transparent">
           {/* Subtle background coordinate grid */}
           <div className="absolute inset-0 cyber-grid opacity-10 pointer-events-none" />
 
@@ -561,23 +516,20 @@ function App() {
             <ProfileCard />
           </div>
 
-          {/* Premium scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none select-none z-20">
-            <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-2 font-bold">Scroll To Explore</span>
-            <div className="w-[1.5px] h-10 bg-zinc-200/80 rounded-full overflow-hidden relative">
-              <motion.div 
-                animate={{ y: [0, 40, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-0 left-0 w-full h-4 bg-gradient-to-b from-accent-indigo to-accent-teal rounded-full"
-              />
-            </div>
-          </div>
         </section>
+      </motion.div>
+    )}
 
-        {/* ==================================================== */}
-        {/* ABOUT ME SECTION */}
-        {/* ==================================================== */}
-        <section id="about" className="relative py-28 border-t border-zinc-200/50 bg-zinc-50/50">
+    {activeSection === 'about' && (
+      <motion.div
+        key="about"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
+      >
+        <section id="about" className="relative py-12 bg-zinc-50/50">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto mb-20">
               <Badge variant="teal" className="mb-4">About Me</Badge>
@@ -677,17 +629,25 @@ function App() {
                       Technology evolves every day, and I continuously improve my skills by building projects, exploring new frameworks, contributing to practical applications, and staying updated with modern software engineering practices.
                     </p>
                   </div>
-                </GlassCard>
-              </motion.div>
-
+                    </GlassCard>
+                  </motion.div>
             </div>
           </div>
-        </section>
 
-        {/* ==================================================== */}
-        {/* TIMELINE / INTERNSHIPS SECTION */}
-        {/* ==================================================== */}
-        <section id="timeline" className="relative py-28 border-t border-zinc-200/50 bg-zinc-100/50">
+        </section>
+      </motion.div>
+    )}
+
+    {activeSection === 'timeline' && (
+      <motion.div
+        key="timeline"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
+      >
+        <section id="timeline" className="relative py-12 bg-zinc-100/50">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto mb-20">
               <Badge variant="purple" className="mb-4">My Internships</Badge>
@@ -798,12 +758,21 @@ function App() {
               </motion.div>
             </div>
           </div>
-        </section>
 
-        {/* ==================================================== */}
-        {/* FEATURED PROJECT SECTION */}
-        {/* ==================================================== */}
-        <section id="flagship" className="relative py-28 border-t border-zinc-200/50 bg-zinc-50/50 overflow-hidden">
+        </section>
+      </motion.div>
+    )}
+
+    {activeSection === 'flagship' && (
+      <motion.div
+        key="flagship"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
+      >
+        <section id="flagship" className="relative py-12 bg-zinc-50/50 overflow-hidden">
           {/* Neon Grid Backdrop */}
           <div className="absolute inset-0 cyber-grid opacity-[0.08]" />
 
@@ -980,12 +949,21 @@ function App() {
               </div>
             </div>
           </div>
-        </section>
 
-        {/* ==================================================== */}
-        {/* SKILL GALAXY SECTION */}
-        {/* ==================================================== */}
-        <section id="skills" className="relative py-28 border-t border-zinc-200/50 bg-zinc-100/50 overflow-hidden">
+        </section>
+      </motion.div>
+    )}
+
+    {activeSection === 'skills' && (
+      <motion.div
+        key="skills"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
+      >
+        <section id="skills" className="relative py-12 bg-zinc-100/50 overflow-hidden">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <Badge variant="teal" className="mb-4">Skill Galaxy</Badge>
@@ -998,119 +976,132 @@ function App() {
             </div>
 
             {/* Galaxy Canvas Box & Legend */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
 
               {/* Galaxy Legend */}
-              <div className="lg:col-span-4 flex flex-col space-y-4 order-2 lg:order-1">
-                <h3 className="text-xl font-bold font-outfit text-zinc-950 mb-3.5 tracking-tight">Core Technical Skills</h3>
+              <div className="lg:col-span-5 flex flex-col space-y-3 order-1 max-h-[540px] overflow-y-auto pr-1 scrollbar-none">
+                <h3 className="text-xl font-bold font-outfit text-zinc-950 mb-1 tracking-tight">Core Technical Stack</h3>
 
-                <div className="space-y-4">
-                  {/* Generative AI / LLMs */}
-                  <div className="flex items-start space-x-4 p-5 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(99,102,241,0.06)] hover:border-accent-indigo/25 transition-all duration-300">
-                    <span className="w-3 h-3 rounded-full bg-accent-indigo shadow-[0_0_10px_rgba(99,102,241,0.6)] flex-shrink-0 mt-1.5" />
-                    <div className="flex-1">
-                      <h4 className="text-base font-extrabold text-zinc-900 font-outfit mb-2.5">Generative AI / LLMs</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-3 py-1 rounded-lg bg-accent-indigo/5 text-accent-indigo border border-accent-indigo/20 text-xs font-outfit font-bold">OpenAI API</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Google Gemini</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Ollama</span>
-                        <span className="px-3 py-1 rounded-lg bg-accent-indigo/5 text-accent-indigo border border-accent-indigo/20 text-xs font-outfit font-bold">LangChain</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Prompt Engineering</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">LLM Orchestration</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">AI Agents (Basic)</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Conversational AI</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Retrieval-Augmented Generation */}
-                  <div className="flex items-start space-x-4 p-5 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(56,189,248,0.06)] hover:border-sky-400/25 transition-all duration-300">
-                    <span className="w-3 h-3 rounded-full bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.6)] flex-shrink-0 mt-1.5" />
-                    <div className="flex-1">
-                      <h4 className="text-base font-extrabold text-zinc-900 font-outfit mb-2.5">Retrieval-Augmented Gen</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-3 py-1 rounded-lg bg-sky-400/5 text-sky-650 border border-sky-400/20 text-xs font-outfit font-bold">RAG Pipeline Design</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Vector Embeddings</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Semantic Search</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Context-Aware Gen</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Memory-Enabled</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Vector Databases & NLP */}
-                  <div className="flex items-start space-x-4 p-5 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(20,184,166,0.06)] hover:border-accent-teal/25 transition-all duration-300">
-                    <span className="w-3 h-3 rounded-full bg-accent-teal shadow-[0_0_10px_rgba(20,184,166,0.6)] flex-shrink-0 mt-1.5" />
-                    <div className="flex-1">
-                      <h4 className="text-base font-extrabold text-zinc-900 font-outfit mb-2.5">Vector Databases & NLP</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-3 py-1 rounded-lg bg-accent-teal/5 text-accent-teal border border-accent-teal/20 text-xs font-outfit font-bold">Qdrant</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">FAISS</span>
-                        <span className="px-3 py-1 rounded-lg bg-accent-teal/5 text-accent-teal border border-accent-teal/20 text-xs font-outfit font-bold">Whisper STT</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Sentence Transformers</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">NLP Fundamentals</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Text Classification</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Programming & Backend */}
-                  <div className="flex items-start space-x-4 p-5 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(245,158,11,0.06)] hover:border-amber-500/25 transition-all duration-300">
+                <div className="space-y-3">
+                  {/* Programming */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(245,158,11,0.06)] hover:border-amber-500/25 transition-all duration-300">
                     <span className="w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.6)] flex-shrink-0 mt-1.5" />
                     <div className="flex-1">
-                      <h4 className="text-base font-extrabold text-zinc-900 font-outfit mb-2.5">Programming & Backend</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-3 py-1 rounded-lg bg-amber-500/5 text-amber-650 border border-amber-500/20 text-xs font-outfit font-bold">Python</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">SQL</span>
-                        <span className="px-3 py-1 rounded-lg bg-amber-500/5 text-amber-650 border border-amber-500/20 text-xs font-outfit font-bold">Django</span>
-                        <span className="px-3 py-1 rounded-lg bg-amber-500/5 text-amber-650 border border-amber-500/20 text-xs font-outfit font-bold">Django REST</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">REST APIs</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">JWT Auth</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">PostgreSQL</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">MySQL</span>
+                      <h4 className="text-sm font-extrabold text-zinc-900 font-outfit mb-2">Programming</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-amber-500/10 text-amber-700 border border-amber-500/20 text-xs font-outfit font-bold">Python</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">C</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-amber-500/10 text-amber-700 border border-amber-500/20 text-xs font-outfit font-bold">JavaScript</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">HTML</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">CSS</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Data & Deployment Tools */}
-                  <div className="flex items-start space-x-4 p-5 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(168,85,247,0.06)] hover:border-purple-500/25 transition-all duration-300">
+                  {/* Frontend */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(56,189,248,0.06)] hover:border-sky-400/25 transition-all duration-300">
+                    <span className="w-3 h-3 rounded-full bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.6)] flex-shrink-0 mt-1.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-extrabold text-zinc-900 font-outfit mb-2">Frontend</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-sky-400/10 text-sky-700 border border-sky-400/20 text-xs font-outfit font-bold">React</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">React Three Fiber</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-sky-400/10 text-sky-700 border border-sky-400/20 text-xs font-outfit font-bold">Tailwind CSS</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Bootstrap</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Backend */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(16,185,129,0.06)] hover:border-emerald-500/25 transition-all duration-300">
+                    <span className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)] flex-shrink-0 mt-1.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-extrabold text-zinc-900 font-outfit mb-2">Backend</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 text-xs font-outfit font-bold">Django</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 text-xs font-outfit font-bold">Django REST Framework</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">REST APIs</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">JWT Authentication</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Database */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(234,179,8,0.06)] hover:border-yellow-500/25 transition-all duration-300">
+                    <span className="w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.6)] flex-shrink-0 mt-1.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-extrabold text-zinc-900 font-outfit mb-2">Database</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-yellow-500/10 text-yellow-700 border border-yellow-500/20 text-xs font-outfit font-bold">PostgreSQL</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">MySQL</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-yellow-500/10 text-yellow-700 border border-yellow-500/20 text-xs font-outfit font-bold">SQL</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* AI & Machine Learning */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(168,85,247,0.06)] hover:border-purple-500/25 transition-all duration-300">
                     <span className="w-3 h-3 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.6)] flex-shrink-0 mt-1.5" />
                     <div className="flex-1">
-                      <h4 className="text-base font-extrabold text-zinc-900 font-outfit mb-2.5">Data &amp; Deployment Tools</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Pandas</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">NumPy</span>
-                        <span className="px-3 py-1 rounded-lg bg-purple-500/5 text-purple-650 border border-purple-500/20 text-xs font-outfit font-bold">Scikit-Learn</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Vercel</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Render</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Docker</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">AWS Basics</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Git / GitHub</span>
-                        <span className="px-3 py-1 rounded-lg bg-zinc-100/80 text-zinc-650 border border-zinc-200/40 text-xs font-outfit font-medium">Postman</span>
+                      <h4 className="text-sm font-extrabold text-zinc-900 font-outfit mb-2">AI &amp; Machine Learning</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">NumPy</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Pandas</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-purple-500/10 text-purple-700 border border-purple-500/20 text-xs font-outfit font-bold">Scikit-learn</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Machine Learning Basics</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">NLP Basics</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-purple-500/10 text-purple-700 border border-purple-500/20 text-xs font-outfit font-bold">OpenAI API</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Google Gemini API</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Ollama (Basics)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tools */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-2xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] hover:shadow-[0_12px_30px_rgba(148,163,184,0.06)] hover:border-slate-400/25 transition-all duration-300">
+                    <span className="w-3 h-3 rounded-full bg-slate-400 shadow-[0_0_10px_rgba(148,163,184,0.6)] flex-shrink-0 mt-1.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-extrabold text-zinc-900 font-outfit mb-2">Tools</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Git</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">GitHub</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">VS Code</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Postman</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Docker (Basics)</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Vercel</span>
+                        <span className="px-2.5 py-0.5 rounded-lg bg-zinc-100/80 text-zinc-700 border border-zinc-200/40 text-xs font-outfit font-medium">Render</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Canvas viewport */}
-              <div className="lg:col-span-8 h-[450px] lg:h-[550px] w-full relative bg-radial-gradient-dark rounded-2xl border border-zinc-200/50 order-1 lg:order-2">
-                <div className="absolute top-4 right-4 bg-zinc-100/50 border border-zinc-200/50 px-2.5 py-1 rounded text-[10px] font-mono text-zinc-500 z-20 select-none">
+              {/* Desktop 3D Galaxy Canvas Viewport (Hidden on Mobile) */}
+              <div className="hidden lg:block lg:col-span-7 h-[540px] w-full relative bg-radial-gradient-dark rounded-3xl border border-zinc-200/60 shadow-[0_10px_40px_rgba(0,0,0,0.04)] order-2 overflow-hidden">
+                <div className="absolute top-4 right-4 bg-zinc-100/60 border border-zinc-200/50 px-3 py-1 rounded-full text-[10px] font-mono text-zinc-500 z-20 select-none backdrop-blur-sm">
                   DRAG MOUSE TO ROTATE
                 </div>
                 <View className="w-full h-full cursor-grab active:cursor-grabbing">
                   <GalaxyScene />
                 </View>
               </div>
-
             </div>
           </div>
-        </section>
 
-        {/* ==================================================== */}
-        {/* OTHER PROJECTS & DETAILS */}
-        {/* ==================================================== */}
-        <section id="other-projects" className="relative py-28 border-t border-zinc-200/50 bg-zinc-50/50">
+        </section>
+      </motion.div>
+    )}
+
+    {activeSection === 'other-projects' && (
+      <motion.div
+        key="other-projects"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
+      >
+        <section id="other-projects" className="relative py-12 bg-zinc-50/50">
           <div className="max-w-7xl mx-auto px-6">
             <div className="max-w-3xl mx-auto text-center mb-20">
               <Badge variant="indigo" className="mb-4">Extended Work</Badge>
@@ -1242,12 +1233,21 @@ function App() {
               </GlassCard>
             </div>
           </div>
-        </section>
 
-        {/* ==================================================== */}
-        {/* CREDENTIALS / ACHIEVEMENTS */}
-        {/* ==================================================== */}
-        <section id="credentials" className="relative py-28 border-t border-zinc-200/50 bg-zinc-100/50">
+        </section>
+      </motion.div>
+    )}
+
+    {activeSection === 'credentials' && (
+      <motion.div
+        key="credentials"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
+      >
+        <section id="credentials" className="relative py-12 bg-zinc-100/50">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <Badge variant="purple" className="mb-4">Certifications & Achievements</Badge>
@@ -1364,12 +1364,21 @@ function App() {
               </div>
             </div>
           </div>
-        </section>
 
-        {/* ==================================================== */}
-        {/* CONTACT / Direct Contact Hub */}
-        {/* ==================================================== */}
-        <section id="contact" className="relative py-28 border-t border-zinc-200/50 bg-zinc-50/50 overflow-hidden">
+        </section>
+      </motion.div>
+    )}
+
+    {activeSection === 'contact' && (
+      <motion.div
+        key="contact"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
+      >
+        <section id="contact" className="relative py-12 bg-zinc-50/50 overflow-hidden">
           <div className="absolute inset-0 cyber-grid opacity-[0.06]" />
 
           <div className="max-w-7xl mx-auto px-6">
@@ -1491,18 +1500,23 @@ function App() {
 
             </div>
           </div>
-        </section>
 
-        <footer className="py-8 border-t border-zinc-200/50 bg-[#FAFAFC]">
-          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-xs text-zinc-400 font-mono">
-            <div>
-              Narendra Naramsetty
+          <footer className="mt-12 py-6 border-t border-zinc-200/50 bg-[#FAFAFC]/60">
+            <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-xs text-zinc-400 font-mono">
+              <div>
+                Narendra Naramsetty
+              </div>
+              <div className="mt-4 md:mt-0 text-zinc-400">
+                ECE Graduate // AI &amp; Software Engineer
+              </div>
             </div>
-            <div className="mt-4 md:mt-0 text-zinc-400">
-              ECE Graduate // AI &amp; Software Engineer
-            </div>
-          </div>
-        </footer>
+          </footer>
+        </section>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
+</div>
       {/* Detailed Internship Modal */}
       <AnimatePresence>
         {selectedInternship && (
@@ -1683,7 +1697,6 @@ function App() {
           </div>
         )}
       </AnimatePresence>
-      </div>
     </div>
   );
 }
