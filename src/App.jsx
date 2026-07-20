@@ -795,7 +795,7 @@ function App() {
                 AI Interview Preparation Platform
               </h2>
               <p className="text-zinc-500 mt-4 mb-6 text-sm md:text-base leading-relaxed font-outfit">
-                A full-stack, deployed <span className="text-zinc-800 font-bold underline decoration-accent-indigo/30 decoration-2">Generative AI platform</span> delivering personalized, <span className="text-zinc-800 font-bold">AI-driven mock interview sessions</span> end-to-end using LangChain workflows and vector retrieval.
+                A full-stack, deployed <span className="text-zinc-800 font-bold underline decoration-accent-indigo/30 decoration-2">Generative AI platform</span> delivering personalized, <span className="text-zinc-800 font-bold">AI-driven mock interview sessions</span> end-to-end using React.js, Django REST Framework, and PostgreSQL.
               </p>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <a
@@ -820,68 +820,52 @@ function App() {
               </motion.div>
             </div>
 
-            {/* 3D Laptop Component Container & Floating widgets */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-20">
+            {/* Centered 3D Hero Scene Canvas */}
+            <div className="w-full max-w-5xl mx-auto h-[450px] md:h-[540px] mb-12 relative flex justify-center items-center">
+              <View className="w-full h-full cursor-grab active:cursor-grabbing">
+                <LaptopScene />
+              </View>
+            </div>
 
-              {/* R3F Canvas Container */}
-              <div className="lg:col-span-7 h-[350px] md:h-[480px] w-full relative">
-                {/* Floating screen overlay widgets */}
-                <div className="absolute top-4 left-4 bg-zinc-100/80 border border-zinc-200/50 p-3 rounded-lg backdrop-blur-md z-20 shadow-lg flex items-center space-x-2 animate-bounce-slow">
-                  <div className="w-2.5 h-2.5 rounded-full bg-accent-teal animate-pulse" />
-                </div>
-
-                <div className="absolute bottom-12 right-4 bg-zinc-100/80 border border-zinc-200/50 p-4 rounded-xl backdrop-blur-md z-20 shadow-lg max-w-[200px]">
-                  <div className="w-full bg-zinc-100 h-1 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-accent-teal h-full w-[92%]" />
-                  </div>
-                </div>
-
-                <View className="w-full h-full cursor-grab active:cursor-grabbing">
-                  <LaptopScene />
-                </View>
+            {/* Featured Capabilities Section (Below 3D Animation) */}
+            <div className="max-w-5xl mx-auto mb-16 px-4">
+              <div className="text-center mb-8">
+                <div className="font-outfit text-xs text-accent-indigo uppercase font-semibold tracking-wider font-mono mb-1">Featured Capabilities</div>
+                <h3 className="text-2xl font-bold font-outfit text-zinc-900">AI Interview Preparation Platform</h3>
+                <p className="text-zinc-600 text-xs md:text-sm leading-relaxed font-outfit max-w-2xl mx-auto mt-2">
+                  Integrates Generative AI APIs to automate technical mock interview loops, dynamically formulate role-specific questions, and provide AI-assisted feedback.
+                </p>
               </div>
 
-              {/* Platform Info details & Stats */}
-              <div className="lg:col-span-5 flex flex-col space-y-6">
-                <div className="font-outfit text-xs text-accent-indigo uppercase font-semibold tracking-wider font-mono">Featured Capabilities</div>
-                <h3 className="text-2xl font-bold font-outfit text-zinc-900">AI Interview Preparation Platform</h3>
-                <p className="text-zinc-600 text-xs md:text-sm leading-relaxed font-outfit">
-                  Integrates RAG chatbots, speech-to-text models, and LLM evaluation chains to automate technical mock interview loops, dynamically formulate role-specific questions, and generate improvement roadmaps.
-                </p>
-
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <div className="p-1.5 rounded bg-accent-indigo/10 text-accent-indigo mt-0.5">
-                      <Mic className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-zinc-900">RAG similarity search</h4>
-                      <p className="text-[11px] text-zinc-500">Sentence Transformers and <span className="text-zinc-800 font-bold">Qdrant vector databases</span> index technical contexts for similarity-based question prompts.</p>
-                    </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white/70 backdrop-blur-sm border border-zinc-200/60 p-6 rounded-2xl flex flex-col space-y-2.5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-9 h-9 rounded-xl bg-accent-indigo/10 text-accent-indigo flex items-center justify-center mb-1">
+                    <Sparkles className="w-5 h-5" />
                   </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="p-1.5 rounded bg-accent-teal/10 text-accent-teal mt-0.5">
-                      <Layers className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-zinc-900">LLM orchestration</h4>
-                      <p className="text-[11px] text-zinc-500">LangChain workflows coordinating <span className="text-zinc-800 font-bold">Ollama, Gemini, and OpenAI API</span> to evaluate resume content.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="p-1.5 rounded bg-accent-purple/10 text-accent-purple mt-0.5">
-                      <Code className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-zinc-900">Whisper Voice Synthesis</h4>
-                      <p className="text-[11px] text-zinc-500">Converts vocal interview answers into text transcripts for <span className="text-zinc-800 font-bold">prompt-engineered evaluation chains</span>.</p>
-                    </div>
-                  </div>
+                  <h4 className="text-sm font-bold text-zinc-900 font-outfit">Generative AI Integration</h4>
+                  <p className="text-xs text-zinc-500 leading-relaxed font-outfit">
+                    Integrates <span className="text-zinc-800 font-bold">Generative AI APIs</span> to generate interview questions and provide basic feedback during sessions.
+                  </p>
                 </div>
 
-                <div className="border-t border-zinc-200/50 pt-6 grid grid-cols-2 gap-4">
+                <div className="bg-white/70 backdrop-blur-sm border border-zinc-200/60 p-6 rounded-2xl flex flex-col space-y-2.5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-9 h-9 rounded-xl bg-accent-teal/10 text-accent-teal flex items-center justify-center mb-1">
+                    <Layers className="w-5 h-5" />
+                  </div>
+                  <h4 className="text-sm font-bold text-zinc-900 font-outfit">RESTful API Architecture</h4>
+                  <p className="text-xs text-zinc-500 leading-relaxed font-outfit">
+                    Built with <span className="text-zinc-800 font-bold">Django REST Framework</span> and JWT authentication for secure login and data persistence.
+                  </p>
+                </div>
+
+                <div className="bg-white/70 backdrop-blur-sm border border-zinc-200/60 p-6 rounded-2xl flex flex-col space-y-2.5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-9 h-9 rounded-xl bg-accent-purple/10 text-accent-purple flex items-center justify-center mb-1">
+                    <Code className="w-5 h-5" />
+                  </div>
+                  <h4 className="text-sm font-bold text-zinc-900 font-outfit">Interactive Dashboards</h4>
+                  <p className="text-xs text-zinc-500 leading-relaxed font-outfit">
+                    Responsive <span className="text-zinc-800 font-bold">React.js interface</span> for performance tracking, interview history, and resume management.
+                  </p>
                 </div>
               </div>
             </div>
@@ -892,69 +876,121 @@ function App() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/70 backdrop-blur-sm border border-zinc-200/60 p-6 md:p-8 rounded-2xl">
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Designed and developed a full-stack <strong className="text-zinc-800 font-bold">Generative AI platform</strong> delivering personalized, AI-driven mock interview sessions end-to-end.
+                      Developed a full-stack <strong className="text-zinc-800 font-bold">AI Interview Preparation Platform</strong> using <strong className="text-zinc-800 font-bold">React.js</strong>, <strong className="text-zinc-800 font-bold">Django REST Framework</strong>, and <strong className="text-zinc-800 font-bold">PostgreSQL</strong> to help users practice technical interviews.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Built a <strong className="text-zinc-800 font-bold">Retrieval-Augmented Generation (RAG) pipeline</strong> using Sentence Transformers for embedding generation and the Qdrant vector database for similarity search.
+                      Designed and implemented a responsive user interface with <strong className="text-zinc-800 font-bold">React.js</strong> for interview practice, resume management, and performance tracking.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Engineered LLM orchestration workflows using <strong className="text-zinc-800 font-bold">LangChain</strong> to coordinate multiple generative models (Ollama, Gemini) for generating technical questions.
+                      Built secure RESTful APIs using <strong className="text-zinc-800 font-bold">Django REST Framework</strong> for user authentication, interview sessions, resume upload, and profile management.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Implemented AI-powered resume analysis using <strong className="text-zinc-800 font-bold">Large Language Models (LLMs)</strong> to generate ATS scores, extract skills, and identify skill gaps.
+                      Implemented <strong className="text-zinc-800 font-bold">JWT-based authentication</strong> to provide secure login, protected routes, and role-based access to application features.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Integrated <strong className="text-zinc-800 font-bold">Whisper Speech-to-Text</strong> for voice-based responses, converting candidate audio into transcribed text for evaluation.
+                      Developed resume upload and management functionality, allowing users to store and access resumes within the platform.
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Designed AI-based evaluation logic using LLM prompting to analyze <strong className="text-zinc-800 font-bold">technical knowledge, communication skills</strong>, and overall response quality.
+                      Integrated <strong className="text-zinc-800 font-bold">Generative AI APIs</strong> to generate interview questions and provide basic AI-assisted feedback during mock interview sessions.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Generated personalized <strong className="text-zinc-800 font-bold">learning roadmaps</strong>, improvement suggestions, and feedback logs using generative model weights.
+                      Designed <strong className="text-zinc-800 font-bold">PostgreSQL</strong> database schemas to efficiently store user profiles, resumes, interview history, and performance reports.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Built supporting RESTful APIs using <strong className="text-zinc-800 font-bold">Django REST Framework</strong> and a PostgreSQL schema to persist embeddings metadata, interview history, and analytics.
+                      Built interactive dashboards to display interview history, user progress, and overall performance summaries.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4" /></span>
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
                     <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
-                      Deployed the frontend to Vercel and backend/LLM services to Render, integrated with a <strong className="text-zinc-800 font-bold">cloud-hosted PostgreSQL database</strong>.
+                      Deployed the frontend on <strong className="text-zinc-800 font-bold">Vercel</strong> and backend on <strong className="text-zinc-800 font-bold">Render</strong>, configuring environment variables and production-ready API communication.
                     </p>
                   </div>
+                  <div className="flex items-start space-x-3">
+                    <span className="p-1 rounded-full bg-accent-indigo/10 text-accent-indigo mt-0.5"><CheckCircle2 className="w-4 h-4 shrink-0" /></span>
+                    <p className="text-xs md:text-sm text-zinc-650 leading-relaxed font-outfit">
+                      Used <strong className="text-zinc-800 font-bold">Git and GitHub</strong> for version control, project management, and collaborative development.
+                    </p>
+                  </div>
+                </div>
 
-                  <div className="pt-2">
-                    <div className="text-[10px] text-zinc-400 font-mono uppercase mb-2">Technologies Used</div>
-                    <div className="flex flex-wrap gap-1">
-                      {['Python', 'LangChain', 'Qdrant', 'Whisper', 'Gemini', 'Django REST', 'PostgreSQL', 'React'].map((t, i) => (
-                        <span key={i} className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 text-[10px] font-mono text-zinc-600">{t}</span>
-                      ))}
+                {/* Technologies Used Grid */}
+                <div className="col-span-1 md:col-span-2 border-t border-zinc-200/60 pt-6 mt-2">
+                  <div className="text-xs text-zinc-400 font-mono uppercase font-semibold mb-3 tracking-wider">Technologies Used</div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                    <div>
+                      <div className="text-[11px] font-bold text-zinc-700 font-outfit mb-1.5">Frontend</div>
+                      <div className="flex flex-wrap gap-1">
+                        {['React.js', 'JavaScript', 'HTML', 'CSS', 'Tailwind CSS'].map((t, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 text-[10px] font-mono text-zinc-600">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold text-zinc-700 font-outfit mb-1.5">Backend</div>
+                      <div className="flex flex-wrap gap-1">
+                        {['Python', 'Django', 'Django REST Framework'].map((t, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 text-[10px] font-mono text-zinc-600">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold text-zinc-700 font-outfit mb-1.5">Database</div>
+                      <div className="flex flex-wrap gap-1">
+                        {['PostgreSQL'].map((t, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 text-[10px] font-mono text-zinc-600">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold text-zinc-700 font-outfit mb-1.5">Authentication</div>
+                      <div className="flex flex-wrap gap-1">
+                        {['JWT Authentication'].map((t, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 text-[10px] font-mono text-zinc-600">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold text-zinc-700 font-outfit mb-1.5">Deployment</div>
+                      <div className="flex flex-wrap gap-1">
+                        {['Vercel', 'Render'].map((t, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 text-[10px] font-mono text-zinc-600">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold text-zinc-700 font-outfit mb-1.5">Tools</div>
+                      <div className="flex flex-wrap gap-1">
+                        {['Git', 'GitHub', 'Postman'].map((t, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 text-[10px] font-mono text-zinc-600">{t}</span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

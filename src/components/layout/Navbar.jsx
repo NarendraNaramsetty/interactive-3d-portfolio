@@ -20,7 +20,7 @@ export const Navbar = () => {
     { id: 'hero', label: 'Home' },
     { id: 'about', label: 'Story' },
     { id: 'timeline', label: 'Internships' },
-    { id: 'skills', label: 'Galaxy' },
+    { id: 'skills', label: 'Skills' },
     { id: 'credentials', label: 'Milestones' },
   ];
 
