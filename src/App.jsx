@@ -162,7 +162,12 @@ import {
   X,
   Mail,
   Phone,
-  ArrowUpRight
+  ArrowUpRight,
+  MapPin,
+  Copy,
+  Check,
+  Clock,
+  Code2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -269,9 +274,16 @@ const projectDetails = {
 function App() {
   const [selectedInternship, setSelectedInternship] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [copied, setCopied] = useState(false);
   const containerRef = useRef(null);
   const { setActiveSection, activeSection, setScrollPercent } = usePortfolioStore();
   const [stats, setStats] = useState({ cgpa: 0, internships: 0, techCount: 0 });
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('narinaramsetty@gmail.com');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
+  };
 
   useEffect(() => {
     // Start count up after preloader completes
@@ -1379,51 +1391,125 @@ function App() {
         className="h-full w-full overflow-y-auto pt-20 pb-28 scrollbar-none"
       >
         <section id="contact" className="relative py-12 bg-zinc-50/50 overflow-hidden">
-          <div className="absolute inset-0 cyber-grid opacity-[0.06]" />
+          <div className="absolute inset-0 cyber-grid opacity-[0.06] pointer-events-none" />
 
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
-              {/* Info Details */}
-              <div className="flex flex-col space-y-6">
-                <Badge variant="indigo" className="w-fit">Connect</Badge>
-                <h2 className="text-3xl md:text-4xl font-bold font-outfit text-zinc-900">Let's Establish Connection</h2>
-                <p className="text-zinc-500 text-sm leading-relaxed max-w-md font-outfit">
-                  Recruiters and engineering teams, feel free to reach out. I am looking for software engineering roles focusing on React web stacks and AI integrations. Let's build something premium together.
-                </p>
+              {/* Left Side: Info Details & Professional Cards */}
+              <div className="lg:col-span-6 flex flex-col space-y-6">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent-indigo/10 border border-accent-indigo/20 text-accent-indigo text-xs font-bold font-outfit w-fit">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>🤝 LET'S CONNECT</span>
+                </div>
 
-                <div className="space-y-4 pt-4 text-xs font-mono text-zinc-600">
-                  <div className="flex items-center space-x-3">
-                    <span className="text-accent-teal font-bold">&gt; Status:</span>
-                    <span>Available for Full-time Roles / Internships</span>
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-extrabold font-outfit text-zinc-900 tracking-tight leading-tight">
+                    Let's Establish <span className="text-gradient-indigo-teal">Connection</span>
+                  </h2>
+                  <p className="text-zinc-600 text-sm leading-relaxed max-w-lg font-outfit mt-3">
+                    Recruiters, engineering leaders, and collaborators—feel free to reach out directly. I am actively looking for software engineering roles focusing on React web stacks and AI integrations. Let's build something extraordinary together.
+                  </p>
+                </div>
+
+                {/* 3 Stylish Glassmorphism Highlight Cards */}
+                <div className="space-y-3.5 pt-1">
+                  {/* Card 1: Status */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:border-emerald-500/30 hover:shadow-[0_8px_25px_rgba(16,185,129,0.06)] transition-all duration-300 group">
+                    <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-600 group-hover:scale-105 transition-transform flex-shrink-0 mt-0.5">
+                      <Briefcase className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600">STATUS</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      </div>
+                      <div className="text-xs font-bold text-zinc-900 font-outfit mt-0.5">
+                        Available for Full-time Roles / Internships
+                      </div>
+                      <p className="text-[11px] text-zinc-500 font-outfit mt-0.5">Ready to join immediately for software engineering &amp; AI development roles.</p>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-accent-indigo font-bold">&gt; Location:</span>
-                    <span>India (Available for remote & relocation)</span>
+
+                  {/* Card 2: Location */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:border-accent-indigo/30 hover:shadow-[0_8px_25px_rgba(99,102,241,0.06)] transition-all duration-300 group">
+                    <div className="p-2.5 rounded-lg bg-accent-indigo/10 text-accent-indigo group-hover:scale-105 transition-transform flex-shrink-0 mt-0.5">
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-accent-indigo">LOCATION &amp; WORK MODE</div>
+                      <div className="text-xs font-bold text-zinc-900 font-outfit mt-0.5">
+                        India · Available for Remote &amp; Relocation
+                      </div>
+                      <p className="text-[11px] text-zinc-500 font-outfit mt-0.5">Open to global remote roles as well as on-site positions.</p>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-accent-purple font-bold">&gt; Base Stack:</span>
-                    <span>React 19, Python, Django, MySQL, ML, RAG</span>
+
+                  {/* Card 3: Base Stack */}
+                  <div className="flex items-start space-x-3.5 p-4 rounded-xl bg-white/80 border border-zinc-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:border-accent-teal/30 hover:shadow-[0_8px_25px_rgba(20,184,166,0.06)] transition-all duration-300 group">
+                    <div className="p-2.5 rounded-lg bg-accent-teal/10 text-accent-teal group-hover:scale-105 transition-transform flex-shrink-0 mt-0.5">
+                      <Code2 className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-accent-teal mb-1.5">CORE STACK &amp; EXPERTISE</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2 py-0.5 rounded-md bg-accent-indigo/10 text-accent-indigo border border-accent-indigo/20 text-[11px] font-mono font-semibold">React 19</span>
+                        <span className="px-2 py-0.5 rounded-md bg-accent-teal/10 text-accent-teal border border-accent-teal/20 text-[11px] font-mono font-semibold">Python</span>
+                        <span className="px-2 py-0.5 rounded-md bg-accent-purple/10 text-accent-purple border border-accent-purple/20 text-[11px] font-mono font-semibold">Django REST</span>
+                        <span className="px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 border border-zinc-200 text-[11px] font-mono">PostgreSQL/MySQL</span>
+                        <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 border border-amber-500/20 text-[11px] font-mono font-semibold">RAG &amp; LLMs</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Action: Copy Email & Response Time */}
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <button
+                    onClick={handleCopyEmail}
+                    className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-zinc-900 text-white hover:bg-zinc-800 text-xs font-bold font-outfit shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-emerald-400">Email Address Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-zinc-300" />
+                        <span>Copy Email Address</span>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="inline-flex items-center space-x-1.5 text-xs text-zinc-500 font-outfit font-medium">
+                  
                   </div>
                 </div>
               </div>
 
-              {/* Direct Contact Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Right Side: Direct Contact Cards Grid */}
+              <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
                 {/* Email Card */}
                 <a 
                   href="mailto:narinaramsetty@gmail.com"
-                  className="block group"
+                  onClick={() => {
+                    window.location.href = "mailto:narinaramsetty@gmail.com";
+                  }}
+                  className="block group relative z-10 cursor-pointer"
                 >
-                  <GlassCard glow="indigo" className="p-5 flex flex-col h-full border border-zinc-200/50 hover:border-[#FF6B35]/30 hover:shadow-[0_12px_25px_rgba(255,107,53,0.05)] transition-all duration-300">
+                  <GlassCard glow="indigo" className="p-5 flex flex-col h-full border border-zinc-200/60 hover:border-red-500/40 hover:shadow-[0_12px_30px_rgba(239,68,68,0.08)] transition-all duration-300">
                     <div className="flex items-center justify-between mb-3.5">
-                      <div className="p-2 rounded-lg bg-red-500/5 text-red-500 group-hover:scale-105 transition-transform">
-                        <Mail className="w-4 h-4" />
+                      <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 group-hover:scale-110 transition-transform">
+                        <Mail className="w-4.5 h-4.5" />
                       </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-650 transition-colors" />
+                      <div className="flex items-center space-x-1 text-[10px] font-mono text-zinc-400 group-hover:text-red-500 transition-colors font-bold">
+                        <span>Click to Mail</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </div>
                     </div>
-                    <div className="text-[10px] text-zinc-400 font-mono uppercase mb-1">Email Address</div>
-                    <div className="text-xs font-bold text-zinc-900 font-outfit truncate">
+                    <div className="text-[10px] text-zinc-400 font-mono uppercase font-bold tracking-wider mb-1">Email Address</div>
+                    <div className="text-xs font-bold text-zinc-900 font-outfit truncate group-hover:text-red-600 transition-colors">
                       narinaramsetty@gmail.com
                     </div>
                   </GlassCard>
@@ -1434,21 +1520,28 @@ function App() {
                   href="https://www.linkedin.com/in/narendra-naramsetty-169476338"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block group"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open("https://www.linkedin.com/in/narendra-naramsetty-169476338", "_blank", "noopener,noreferrer");
+                  }}
+                  className="block group relative z-10 cursor-pointer"
                 >
-                  <GlassCard glow="indigo" className="p-5 flex flex-col h-full border border-zinc-200/50 hover:border-[#FF6B35]/30 hover:shadow-[0_12px_25px_rgba(255,107,53,0.05)] transition-all duration-300">
+                  <GlassCard glow="indigo" className="p-5 flex flex-col h-full border border-zinc-200/60 hover:border-blue-500/40 hover:shadow-[0_12px_30px_rgba(59,130,246,0.08)] transition-all duration-300">
                     <div className="flex items-center justify-between mb-3.5">
-                      <div className="p-2 rounded-lg bg-blue-500/5 text-blue-500 group-hover:scale-105 transition-transform">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-600 group-hover:scale-110 transition-transform">
+                        <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                           <rect x="2" y="9" width="4" height="12" />
                           <circle cx="4" cy="4" r="2" />
                         </svg>
                       </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-650 transition-colors" />
+                      <div className="flex items-center space-x-1 text-[10px] font-mono text-zinc-400 group-hover:text-blue-600 transition-colors font-bold">
+                        <span>Click to Open</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </div>
                     </div>
-                    <div className="text-[10px] text-zinc-400 font-mono uppercase mb-1">LinkedIn</div>
-                    <div className="text-xs font-bold text-zinc-900 font-outfit truncate">
+                    <div className="text-[10px] text-zinc-400 font-mono uppercase font-bold tracking-wider mb-1">LinkedIn</div>
+                    <div className="text-xs font-bold text-zinc-900 font-outfit truncate group-hover:text-blue-600 transition-colors">
                       Narendra Naramsetty
                     </div>
                   </GlassCard>
@@ -1459,20 +1552,27 @@ function App() {
                   href="https://github.com/NarendraNaramsetty"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block group"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open("https://github.com/NarendraNaramsetty", "_blank", "noopener,noreferrer");
+                  }}
+                  className="block group relative z-10 cursor-pointer"
                 >
-                  <GlassCard glow="indigo" className="p-5 flex flex-col h-full border border-zinc-200/50 hover:border-[#FF6B35]/30 hover:shadow-[0_12px_25px_rgba(255,107,53,0.05)] transition-all duration-300">
+                  <GlassCard glow="indigo" className="p-5 flex flex-col h-full border border-zinc-200/60 hover:border-zinc-900/40 hover:shadow-[0_12px_30px_rgba(24,24,27,0.08)] transition-all duration-300">
                     <div className="flex items-center justify-between mb-3.5">
-                      <div className="p-2 rounded-lg bg-zinc-900/5 text-zinc-900 group-hover:scale-105 transition-transform">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <div className="p-2.5 rounded-xl bg-zinc-900/10 text-zinc-900 group-hover:scale-110 transition-transform">
+                        <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
                           <path d="M9 18c-4.51 2-5-2-7-2" />
                         </svg>
                       </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-650 transition-colors" />
+                      <div className="flex items-center space-x-1 text-[10px] font-mono text-zinc-400 group-hover:text-zinc-900 transition-colors font-bold">
+                        <span>Click to Open</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </div>
                     </div>
-                    <div className="text-[10px] text-zinc-400 font-mono uppercase mb-1">GitHub</div>
-                    <div className="text-xs font-bold text-zinc-900 font-outfit truncate">
+                    <div className="text-[10px] text-zinc-400 font-mono uppercase font-bold tracking-wider mb-1">GitHub</div>
+                    <div className="text-xs font-bold text-zinc-900 font-outfit truncate group-hover:text-zinc-900 transition-colors">
                       NarendraNaramsetty
                     </div>
                   </GlassCard>
@@ -1481,17 +1581,23 @@ function App() {
                 {/* Mobile Card */}
                 <a 
                   href="tel:+916301380071"
-                  className="block group"
+                  onClick={() => {
+                    window.location.href = "tel:+916301380071";
+                  }}
+                  className="block group relative z-10 cursor-pointer"
                 >
-                  <GlassCard glow="indigo" className="p-5 flex flex-col h-full border border-zinc-200/50 hover:border-[#FF6B35]/30 hover:shadow-[0_12px_25px_rgba(255,107,53,0.05)] transition-all duration-300">
+                  <GlassCard glow="indigo" className="p-5 flex flex-col h-full border border-zinc-200/60 hover:border-teal-500/40 hover:shadow-[0_12px_30px_rgba(20,184,166,0.08)] transition-all duration-300">
                     <div className="flex items-center justify-between mb-3.5">
-                      <div className="p-2 rounded-lg bg-teal-500/5 text-teal-500 group-hover:scale-105 transition-transform">
-                        <Phone className="w-4 h-4" />
+                      <div className="p-2.5 rounded-xl bg-teal-500/10 text-teal-600 group-hover:scale-110 transition-transform">
+                        <Phone className="w-4.5 h-4.5" />
                       </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-650 transition-colors" />
+                      <div className="flex items-center space-x-1 text-[10px] font-mono text-zinc-400 group-hover:text-teal-600 transition-colors font-bold">
+                        <span>Click to Call</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </div>
                     </div>
-                    <div className="text-[10px] text-zinc-400 font-mono uppercase mb-1">Mobile Number</div>
-                    <div className="text-xs font-bold text-zinc-900 font-outfit truncate">
+                    <div className="text-[10px] text-zinc-400 font-mono uppercase font-bold tracking-wider mb-1">Mobile Number</div>
+                    <div className="text-xs font-bold text-zinc-900 font-outfit truncate group-hover:text-teal-600 transition-colors">
                       +91 63013 80071
                     </div>
                   </GlassCard>
