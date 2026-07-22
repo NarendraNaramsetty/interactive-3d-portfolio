@@ -176,19 +176,20 @@ const ParticleField = () => {
       ))}
     </group>
   );
-};
-
-export const LaptopScene = () => {
+};export const LaptopScene = () => {
   const laptopGroupRef = useRef();
   const scrollPercent = usePortfolioStore((state) => state.scrollPercent);
   const [scale, setScale] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setScale(0.55);
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+      if (mobile) {
+        setScale(0.42);
       } else if (window.innerWidth < 1024) {
-        setScale(0.78);
+        setScale(0.75);
       } else {
         setScale(1.0);
       }
@@ -197,7 +198,6 @@ export const LaptopScene = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   // Subtle floating motion for laptop centerpiece
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
@@ -292,23 +292,23 @@ export const LaptopScene = () => {
 
       {/* Card 1: Resume Uploaded Card (Top Left) */}
       <Float speed={1.8} rotationIntensity={0.1} floatIntensity={0.4}>
-        <Html position={[-3.0, 1.6, 0.4]} distanceFactor={4.5} center>
-          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-3 rounded-2xl shadow-xl min-w-[180px] select-none">
-            <div className="flex items-center space-x-2 mb-2">
-              <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600">
-                <FileText className="w-4 h-4" />
+        <Html position={[isMobile ? -1.95 : -3.0, 1.6, 0.4]} distanceFactor={isMobile ? 5.2 : 4.5} center>
+          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-xl min-w-[130px] sm:min-w-[180px] select-none">
+            <div className="flex items-center space-x-1.5 sm:space-x-2 mb-1.5 sm:mb-2">
+              <div className="p-1 sm:p-1.5 rounded-lg bg-indigo-50 text-indigo-600">
+                <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
               <div>
-                <h5 className="text-xs font-bold text-zinc-900 font-outfit">Resume Card</h5>
-                <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-0.5">
-                  <CheckCircle2 className="w-3 h-3" /> Uploaded
+                <h5 className="text-[10px] sm:text-xs font-bold text-zinc-900 font-outfit leading-tight">Resume Card</h5>
+                <span className="text-[8px] sm:text-[10px] text-emerald-600 font-semibold flex items-center gap-0.5">
+                  <CheckCircle2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> Uploaded
                 </span>
               </div>
             </div>
-            <div className="text-[10px] font-mono text-zinc-400 mb-1">Skills Extracted:</div>
-            <div className="flex flex-wrap gap-1">
+            <div className="text-[8px] sm:text-[10px] font-mono text-zinc-400 mb-0.5 sm:mb-1">Skills:</div>
+            <div className="flex flex-wrap gap-0.5 sm:gap-1">
               {['Python', 'React', 'Django', 'SQL'].map((skill) => (
-                <span key={skill} className="px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200/60 text-[9px] font-mono font-medium text-zinc-700">
+                <span key={skill} className="px-1 sm:px-1.5 py-0.2 sm:py-0.5 rounded bg-zinc-100 border border-zinc-200/60 text-[8px] sm:text-[9px] font-mono font-medium text-zinc-700">
                   {skill}
                 </span>
               ))}
@@ -319,18 +319,18 @@ export const LaptopScene = () => {
 
       {/* Card 2: AI Assistant Bubble (Top Right) */}
       <Float speed={2.2} rotationIntensity={0.12} floatIntensity={0.5}>
-        <Html position={[3.0, 1.7, 0.3]} distanceFactor={4.5} center>
-          <div className="bg-white/90 backdrop-blur-md border border-indigo-100 p-3 rounded-2xl shadow-xl max-w-[200px] select-none">
-            <div className="flex items-start space-x-2.5">
-              <div className="p-1.5 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-500 text-white shrink-0 shadow-md">
-                <Bot className="w-4 h-4" />
+        <Html position={[isMobile ? 1.95 : 3.0, 1.7, 0.3]} distanceFactor={isMobile ? 5.2 : 4.5} center>
+          <div className="bg-white/90 backdrop-blur-md border border-indigo-100 p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-xl max-w-[150px] sm:max-w-[200px] select-none">
+            <div className="flex items-start space-x-1.5 sm:space-x-2.5">
+              <div className="p-1 sm:p-1.5 rounded-lg sm:rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-500 text-white shrink-0 shadow-md">
+                <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
               <div>
                 <div className="flex items-center space-x-1 mb-0.5">
-                  <span className="text-xs font-bold text-zinc-900 font-outfit">AI Assistant</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] sm:text-xs font-bold text-zinc-900 font-outfit">AI Assistant</span>
+                  <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
-                <p className="text-[11px] text-zinc-650 leading-snug font-outfit">
+                <p className="text-[9px] sm:text-[11px] text-zinc-650 leading-snug font-outfit">
                   "Let's begin your interview."
                 </p>
               </div>
@@ -341,19 +341,19 @@ export const LaptopScene = () => {
 
       {/* Card 3: Score Card (Middle Right) */}
       <Float speed={1.5} rotationIntensity={0.08} floatIntensity={0.3}>
-        <Html position={[3.0, 0.1, 0.6]} distanceFactor={4.5} center>
-          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-3 rounded-2xl shadow-xl min-w-[165px] select-none">
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[11px] font-bold text-zinc-800 font-outfit">Score Card</span>
-              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+        <Html position={[isMobile ? 2.1 : 3.0, 0.1, 0.6]} distanceFactor={isMobile ? 5.2 : 4.5} center>
+          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-xl min-w-[125px] sm:min-w-[165px] select-none">
+            <div className="flex items-center justify-between mb-1 sm:mb-1.5">
+              <span className="text-[9px] sm:text-[11px] font-bold text-zinc-800 font-outfit">Score Card</span>
+              <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 fill-amber-500" />
             </div>
-            <div className="flex items-baseline space-x-1.5">
-              <span className="text-xl font-extrabold text-zinc-900 font-outfit">85%</span>
-              <span className="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-mono">
+            <div className="flex items-baseline space-x-1 sm:space-x-1.5">
+              <span className="text-base sm:text-xl font-extrabold text-zinc-900 font-outfit">85%</span>
+              <span className="text-[8px] sm:text-[10px] font-medium text-emerald-600 bg-emerald-50 px-1 sm:px-1.5 py-0.2 sm:py-0.5 rounded font-mono">
                 Technical
               </span>
             </div>
-            <div className="w-full bg-zinc-100 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div className="w-full bg-zinc-100 h-1 rounded-full mt-1.5 sm:mt-2 overflow-hidden">
               <div className="bg-gradient-to-r from-amber-500 to-emerald-500 h-full w-[85%]" />
             </div>
           </div>
@@ -362,13 +362,13 @@ export const LaptopScene = () => {
 
       {/* Card 4: Chat Bubble (Middle Left) */}
       <Float speed={2.0} rotationIntensity={0.1} floatIntensity={0.4}>
-        <Html position={[-3.0, 0.0, 0.7]} distanceFactor={4.5} center>
-          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-3 rounded-2xl shadow-xl max-w-[195px] select-none">
-            <div className="flex items-center space-x-2 mb-1">
-              <MessageSquare className="w-3.5 h-3.5 text-indigo-500" />
-              <span className="text-[10px] font-mono text-zinc-400 uppercase">Question Prompt</span>
+        <Html position={[isMobile ? -2.1 : -3.0, 0.0, 0.7]} distanceFactor={isMobile ? 5.2 : 4.5} center>
+          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-xl max-w-[145px] sm:max-w-[195px] select-none">
+            <div className="flex items-center space-x-1.5 sm:space-x-2 mb-1">
+              <MessageSquare className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-indigo-500" />
+              <span className="text-[8px] sm:text-[10px] font-mono text-zinc-400 uppercase">Question Prompt</span>
             </div>
-            <p className="text-xs font-semibold text-zinc-800 font-outfit leading-tight">
+            <p className="text-[10px] sm:text-xs font-semibold text-zinc-800 font-outfit leading-tight">
               "Explain JWT Authentication."
             </p>
           </div>
@@ -377,14 +377,14 @@ export const LaptopScene = () => {
 
       {/* Card 5: Dashboard Card (Bottom Right) */}
       <Float speed={1.6} rotationIntensity={0.08} floatIntensity={0.3}>
-        <Html position={[2.9, -1.6, 0.8]} distanceFactor={4.5} center>
-          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-3 rounded-2xl shadow-xl min-w-[170px] select-none">
-            <div className="flex items-center space-x-2 mb-1">
-              <BarChart3 className="w-3.5 h-3.5 text-teal-600" />
-              <span className="text-[11px] font-bold text-zinc-800 font-outfit">Dashboard</span>
+        <Html position={[isMobile ? 1.95 : 2.9, -1.6, 0.8]} distanceFactor={isMobile ? 5.2 : 4.5} center>
+          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-xl min-w-[130px] sm:min-w-[170px] select-none">
+            <div className="flex items-center space-x-1.5 sm:space-x-2 mb-1">
+              <BarChart3 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-teal-600" />
+              <span className="text-[9px] sm:text-[11px] font-bold text-zinc-800 font-outfit">Dashboard</span>
             </div>
-            <div className="flex items-center justify-between text-[11px] font-medium text-zinc-600">
-              <span>Questions Completed</span>
+            <div className="flex items-center justify-between text-[9px] sm:text-[11px] font-medium text-zinc-650">
+              <span>Completed</span>
               <span className="font-mono font-bold text-zinc-900">7/10</span>
             </div>
             <div className="w-full bg-zinc-100 h-1.5 rounded-full mt-2 overflow-hidden">
@@ -396,18 +396,21 @@ export const LaptopScene = () => {
 
       {/* Card 6: Progress Ring Card (Bottom Left) */}
       <Float speed={1.9} rotationIntensity={0.1} floatIntensity={0.4}>
-        <Html position={[-2.9, -1.7, 0.9]} distanceFactor={4.5} center>
-          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-3 rounded-2xl shadow-xl min-w-[170px] select-none flex items-center space-x-3">
-            <div className="relative w-9 h-9 flex items-center justify-center shrink-0">
-              <svg className="w-9 h-9 transform -rotate-90">
-                <circle cx="18" cy="18" r="14" stroke="#E2E8F0" strokeWidth="3" fill="transparent" />
-                <circle cx="18" cy="18" r="14" stroke="#6366F1" strokeWidth="3" fill="transparent" strokeDasharray="88" strokeDashoffset="26" strokeLinecap="round" />
+        <Html position={[isMobile ? -1.95 : -2.9, -1.7, 0.9]} distanceFactor={isMobile ? 5.2 : 4.5} center>
+          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-xl min-w-[130px] sm:min-w-[170px] select-none flex items-center space-x-2 sm:space-x-3">
+            <div className="relative w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center shrink-0">
+              <svg className="w-7 h-7 sm:w-9 sm:h-9 transform -rotate-90">
+                <circle cx="14" cy="14" r="11" stroke="#E2E8F0" strokeWidth="2.5" fill="transparent" className="sm:hidden" />
+                <circle cx="14" cy="14" r="11" stroke="#6366F1" strokeWidth="2.5" fill="transparent" strokeDasharray="69" strokeDashoffset="20" strokeLinecap="round" className="sm:hidden" />
+                
+                <circle cx="18" cy="18" r="14" stroke="#E2E8F0" strokeWidth="3" fill="transparent" className="hidden sm:block" />
+                <circle cx="18" cy="18" r="14" stroke="#6366F1" strokeWidth="3" fill="transparent" strokeDasharray="88" strokeDashoffset="26" strokeLinecap="round" className="hidden sm:block" />
               </svg>
-              <Target className="w-3.5 h-3.5 text-indigo-600 absolute" />
+              <Target className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-indigo-600 absolute" />
             </div>
             <div>
-              <div className="text-[10px] font-mono text-zinc-400">Progress Ring</div>
-              <div className="text-xs font-bold text-zinc-900 font-outfit">70% Progress</div>
+              <div className="text-[8px] sm:text-[10px] font-mono text-zinc-400">Progress</div>
+              <div className="text-[10px] sm:text-xs font-bold text-zinc-900 font-outfit">70% Progress</div>
             </div>
           </div>
         </Html>

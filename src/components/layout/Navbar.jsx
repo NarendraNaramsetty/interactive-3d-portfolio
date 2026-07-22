@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolioStore } from '../../store/usePortfolioStore';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Home, User, Briefcase, Cpu, Award, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar = () => {
@@ -17,11 +17,11 @@ export const Navbar = () => {
   }, []);
 
   const navItems = [
-    { id: 'hero', label: 'Home' },
-    { id: 'about', label: 'Story' },
-    { id: 'timeline', label: 'Internships' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'credentials', label: 'Milestones' },
+    { id: 'hero', label: 'Home', icon: Home },
+    { id: 'about', label: 'Story', icon: User },
+    { id: 'timeline', label: 'Internships', icon: Briefcase },
+    { id: 'skills', label: 'Skills', icon: Cpu },
+    { id: 'credentials', label: 'Milestones', icon: Award },
   ];
 
   const handleNavClick = (id) => {
@@ -87,9 +87,9 @@ export const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-zinc-500 hover:text-zinc-900 transition-colors"
+              className="p-2 rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-sm text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50 hover:border-zinc-300 transition-all duration-300 shadow-sm"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -98,31 +98,91 @@ export const Navbar = () => {
       {/* Mobile Nav Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 top-[72px] z-40 bg-[#FAFAFC]/95 backdrop-blur-lg flex flex-col items-center justify-center space-y-6 md:hidden border-t border-obsidian-900"
-          >
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`text-xl font-semibold font-outfit ${
-                  activeSection === item.id ? 'text-accent-indigo font-bold' : 'text-zinc-600'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-            <button
-              onClick={() => handleNavClick('contact')}
-              className="flex items-center space-x-1 text-xl font-bold font-outfit text-accent-teal"
+          <>
+            {/* Dark backdrop overlay that dims the background and closes the menu when clicked */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-40 bg-zinc-950/20 backdrop-blur-[2px] md:hidden"
+            />
+
+            {/* Stylish pop-up navigation card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 26 }}
+              className="fixed top-20 right-6 z-50 w-[calc(100vw-3rem)] max-w-[340px] bg-white/95 backdrop-blur-xl border border-zinc-200/60 shadow-2xl rounded-2xl p-5 md:hidden"
             >
-              <span>Connect</span>
-              <ArrowUpRight className="w-5 h-5" />
-            </button>
-          </motion.div>
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-200/50">
+                <span className="font-outfit text-xs uppercase font-extrabold tracking-wider text-zinc-400">
+                  Navigation
+                </span>
+                {/* Available for roles badge */}
+                <div className="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-medium font-outfit">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                  </span>
+                  <span>Active & Available</span>
+                </div>
+              </div>
+
+              {/* Navigation List */}
+              <div className="flex flex-col space-y-1">
+                {navItems.map((item) => {
+                  const IconComponent = item.icon;
+                  const isActive = activeSection === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleNavClick(item.id)}
+                      className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 w-full text-left font-outfit group ${
+                        isActive
+                          ? 'bg-[#FF6B35]/10 text-[#FF6B35] shadow-sm'
+                          : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/70'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div
+                          className={`p-1.5 rounded-lg transition-colors ${
+                            isActive ? 'bg-[#FF6B35]/10 text-[#FF6B35]' : 'bg-zinc-100 text-zinc-400 group-hover:text-zinc-650'
+                          }`}
+                        >
+                          <IconComponent className="w-4 h-4" />
+                        </div>
+                        <span className="text-sm font-semibold">{item.label}</span>
+                      </div>
+                      
+                      {/* Active indicator */}
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeDot"
+                          className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]"
+                          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Call To Action Footer */}
+              <div className="mt-4 pt-3 border-t border-zinc-200/50">
+                <button
+                  onClick={() => handleNavClick('contact')}
+                  className="w-full flex items-center justify-center space-x-2 p-3 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:shadow-[0_4px_12px_rgba(255,107,53,0.25)] text-white text-sm font-bold font-outfit transition-all duration-300"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Get in Touch</span>
+                  <ArrowUpRight className="w-4 h-4 ml-0.5 opacity-80" />
+                </button>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
